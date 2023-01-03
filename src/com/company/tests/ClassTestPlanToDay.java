@@ -1,6 +1,7 @@
 package com.company.tests;
 
 import com.company.PlanToDay;
+import com.company.Subject;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -29,6 +30,20 @@ public class ClassTestPlanToDay {
         LocalDate localDate=LocalDate.now();
         PlanToDay planToDay1=new PlanToDay(localDate, 10);
         assertTrue(planToDay1.getSizeOfQuetion()==10);
+    }
+
+    @Test
+    public void testDateToString() {
+        {
+            PlanToDay date=new PlanToDay(LocalDate.of(2001, 2, 19), 0);
+            String res="2001-02-19";
+            assertEquals(date.dateToString(), res);
+        }
+        {
+            PlanToDay date=new PlanToDay(LocalDate.of(2001, 10, 19), 0);
+            String res="2001-10-19";
+            assertEquals(date.dateToString(), res);
+        }
     }
 
 }

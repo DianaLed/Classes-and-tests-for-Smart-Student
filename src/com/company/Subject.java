@@ -10,65 +10,69 @@ public class Subject {
     private ArrayList<Question> question;
 
     public Subject() {
-        nameOfSub ="";
-        question=new ArrayList<Question>();
-    }
-    public Subject(String name) {
-        this.nameOfSub =name;
-        this.question=new ArrayList<Question>();
-    }
-    public Subject(String name, ArrayList<Question> arr_questions) {
-        nameOfSub =name;
-        question=arr_questions;
+        nameOfSub = "";
+        question = new ArrayList<Question>();
     }
 
-    public void addQuestion(Question quest)
-    {
+    public Subject(String name) {
+        this.nameOfSub = name;
+        this.question = new ArrayList<Question>();
+    }
+
+    public Subject(String name, ArrayList<Question> arr_questions) {
+        nameOfSub = name;
+        question = arr_questions;
+    }
+
+    public void addQuestion(Question quest) {
         question.add(quest);
     }
-    public void deleteQuestion(int nom)
-    {
-        if(nom>=0&&nom<question.size()) question.remove(nom);
+
+    public void deleteQuestion(int nom) {
+        if (nom >= 0 && nom < question.size()) question.remove(nom);
     }
-    public void changeQuestion (int nom, String quest, String answer){
-        if(nom>=0&&nom<question.size()) {
+
+    public void changeQuestion(int nom, String quest, String answer) {
+        if (nom >= 0 && nom < question.size()) {
             question.get(nom).setAnswer(answer);
             question.get(nom).setQuestion(quest);
-        }else{
+        } else {
             throw new ArithmeticException
-                    ("В предмете "+nameOfSub+" "+ question.size()+" вопросов, а ты пытаешься работать с "+ nom+1);
+                    ("В предмете " + nameOfSub + " " + question.size() + " вопросов, а ты пытаешься работать с " + nom + 1);
         }
     }
 
-    public Question getQuestion (int nom){
-        if(nom < question.size() && nom >= 0) return question.get(nom);
+    public Question getQuestion(int nom) {
+        if (nom < question.size() && nom >= 0) return question.get(nom);
         else throw new ArithmeticException
-                ("В предмете "+nameOfSub+" "+ question.size()+" вопросов, а ты пытаешься работать с "+ nom+1);
+                ("В предмете " + nameOfSub + " " + question.size() + " вопросов, а ты пытаешься работать с " + nom + 1);
     }
 
 
     //--------------------Возврат по размерам-------------------
-    public int getSizeAllQuest(){
+    public int getSizeAllQuest() {
         //количество вопросов
         return question.size();
     }
-    public int getSizeKnow(){
-        int d=0;
-        for(int i=0; i<question.size(); i++){
-            if(question.get(i).getPercentKnow()==1.0) d++;
+
+    public int getSizeKnow() {
+        int d = 0;
+        for (int i = 0; i < question.size(); i++) {
+            if (question.get(i).getPercentKnow() == 1.0) d++;
         }
         return d;
     }
+
     public int getSizeNoKnow() {
-        int d=0;
-        for(int i=0; i<question.size(); i++){
-            if(question.get(i).getPercentKnow()!=1.0) d++;
+        int d = 0;
+        for (int i = 0; i < question.size(); i++) {
+            if (question.get(i).getPercentKnow() != 1.0) d++;
         }
         return d;
     }
 
     //----------------------Работа с именем---------------------
-    public String getNameOfSubme(){
+    public String getNameOfSubme() {
         return nameOfSub;
     }
 
@@ -77,34 +81,44 @@ public class Subject {
     }
 
     //--------------------Выдача вопросов для алгоритма---------
-    public int getPositionOldestDay(){
-        Integer r=-1;
-        LocalDate res=LocalDate.now();
-            for (int i = 0; i < question.size(); i++) {
-                if(res.isAfter(question.get(i).getLastDate())&&question.get(i).getPercentKnow()==1.0) {
-                    res = question.get(i).getLastDate();
-                    r=i;
-                }
+    public int getPositionOldestDay() {
+        Integer r = -1;
+        LocalDate res = LocalDate.now();
+        for (int i = 0; i < question.size(); i++) {
+            if (res.isAfter(question.get(i).getLastDate()) && question.get(i).getPercentKnow() == 1.0) {
+                res = question.get(i).getLastDate();
+                r = i;
             }
-            return r;
+        }
+        return r;
     }
 
-    public int getPositionHardQuestionAndNotToDay(){
-        Integer r=-1;
-        Integer hard=0;
-        LocalDate today=LocalDate.now();
-        if(question.size()>0){
+    public int getPositionHardQuestionAndNotToDay() {
+        Integer r = -1;
+        Integer hard = 0;
+        LocalDate today = LocalDate.now();
+        if (question.size() > 0) {
             for (Integer i = 0; i < question.size(); i++) {
-                if(question.get(i).getPercentKnow()==1.0
-                        &&!question.get(i).getLastDate().isEqual(today)) {
-                    if(hard<question.get(i).getSizeOfView())
-                    r=i;
-                    hard=question.get(i).getSizeOfView();
+                if (question.get(i).getPercentKnow() == 1.0
+                        && !question.get(i).getLastDate().isEqual(today)) {
+                    if (hard < question.get(i).getSizeOfView())
+                        r = i;
+                    hard = question.get(i).getSizeOfView();
                 }
             }
         }
-        return  r;
+        return r;
     }
+
+//    public  ArrayList<Questions> getQuestions(){
+//        ArrayList<Questions> res=new ArrayList<>();
+//        for(int i=0; i<question.size(); i++){
+//            res.add(new Questions(question.get(i).getId(), question.get(i).getQuestion(),
+//                    question.get(i).getAnswer(), question.get(i).dateToString(), question.get(i).getPercentKnow(),
+//                    question.get(i).getSizeOfView(), null));
+//        }
+//        return res;
+//    }
 
     public int getPositionNoKnowNoViev(){
         for (int i = 0; i < question.size(); i++) {
@@ -116,7 +130,7 @@ public class Subject {
         ArrayList<Integer> res=new ArrayList<>();
         for (int i = 0; i < question.size(); i++) {
             if(question.get(i).getSizeOfView()>0
-            && question.get(i).getPercentKnow()<1.0){
+                    && question.get(i).getPercentKnow()<1.0){
                 res.add(i);
             }
         }
@@ -133,7 +147,7 @@ public class Subject {
         if(res.size()>0){
             int i1=0;
             Double hard=
-            question.get(res.get(0)).getPercentKnow();
+                    question.get(res.get(0)).getPercentKnow();
             for(int i=0; i<res.size()-1; i++){
                 for(int j=i+1; j<res.size(); j++){
                     double a=question.get(res.get(i)).getPercentKnow();
@@ -144,7 +158,8 @@ public class Subject {
         }
         return res;
     }
-//    public ArrayList<Question> getQuestion(){
-//        return question;
-//    }
+    public ArrayList<Question> getQuestion(){
+        return question;
+    }
 }
+

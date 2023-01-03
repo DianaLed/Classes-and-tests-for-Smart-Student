@@ -1,16 +1,33 @@
-package com.company;//package com.example.myapplication1;
+package com.company;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class PlanToSub {
-    private  Subject sub; //предмет
+    private Subject sub; //предмет
     private  ArrayList<PlanToDay> lastPlan; //прошлое
     private  ArrayList<PlanToDay> futurePlan; //планы на будущие дни
     private  int learnedBefore;
     private  int todayLearned; //сколько выучили именно сегодня //Это передается из бд
     private LocalDate dateOfExams; //Дата, когда будет экзамен //Это из бд
+    private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public PlanToSub(){
+        sub=new Subject();
+        futurePlan =new ArrayList<PlanToDay>();
+        lastPlan=new ArrayList<PlanToDay>();
+        todayLearned =0;
+        this.dateOfExams=LocalDate.now();
+    }
 
     public PlanToSub(Subject sub_, LocalDate dateOfExams){
         sub=sub_;
@@ -31,11 +48,11 @@ public class PlanToSub {
     public void plusDayToPlan(LocalDate date){
         if(date.isBefore(dateOfExams)&&
                 (date.isAfter(LocalDate.now())||date.isEqual(LocalDate.now())))
-        if(!isHavePlan(date)){
-            PlanToDay planToDay=new PlanToDay(date, 0);
-            futurePlan.add(planToDay);
-            newSizeQuestionOnFuture();
-        }
+            if(!isHavePlan(date)){
+                PlanToDay planToDay=new PlanToDay(date, 0);
+                futurePlan.add(planToDay);
+                newSizeQuestionOnFuture();
+            }
     }
 
     public void minusDayToPlan(LocalDate date) {
@@ -105,13 +122,19 @@ public class PlanToSub {
         //должен план перейти из будущего в прошлое
         //Тут мы должны проверить, все ли прошедшие дни перешли в прошлое.
     }
+
     //----------------Вспомогательные функции------------------
 
+    public void setFuture(ArrayList<PlanToDay> sFuturePlan){
+        futurePlan=sFuturePlan;
+        newSizeQuestionOnFuture();
+    }
+
     private boolean isHavePlan(LocalDate date) {
-            for (int i = 0; i < futurePlan.size(); i++) {
-                if (futurePlan.get(i).getDate().isEqual(date))
-                    return true;
-            }
+        for (int i = 0; i < futurePlan.size(); i++) {
+            if (futurePlan.get(i).getDate().isEqual(date))
+                return true;
+        }
         return false;
     }
     private void sortFuturePlan(){
@@ -153,9 +176,15 @@ public class PlanToSub {
 
     //--------------Функци Set и Get
 
+
     public LocalDate getDateOfExams() {
         return dateOfExams;
     }
+
+    public void setDateOfExams(LocalDate dateOfExams) {
+        this.dateOfExams = dateOfExams;
+    }
+
     public ArrayList<PlanToDay> getLastPlan(){
         ArrayList<PlanToDay> res=new ArrayList<>(lastPlan);
         return res;
@@ -175,9 +204,39 @@ public class PlanToSub {
             learnedBefore=sub.getSizeKnow();
             todayLearned++;
         }else
-            if(learnedBefore>sub.getSizeKnow()) {
+        if(learnedBefore>sub.getSizeKnow()) {
             learnedBefore = sub.getSizeKnow();
             todayLearned--;
         }
+    }
+
+//    public  ArrayList<Plan> getPlans(){
+//        ArrayList<Plan> res=new ArrayList<>();
+//
+//        for(PlanToDay planToDay:lastPlan){
+//            res.add(new Plan(planToDay.getId(), planToDay.dateToString(), planToDay.getSizeOfQuetion(), null));
+//        }
+//        for(PlanToDay planToDay:futurePlan){
+//            res.add(new Plan(planToDay.getId(), planToDay.dateToString(), planToDay.getSizeOfQuetion(), null));
+//        }
+//        return res;
+//    }
+
+    public String dateToString() {
+        String dateStr;
+        if (dateOfExams.getMonthValue() >=10){
+            if (dateOfExams.getDayOfMonth()>=10){
+                dateStr = dateOfExams.getYear()+"-"+(dateOfExams.getMonthValue())+"-"+dateOfExams.getDayOfMonth();
+            }else {
+                dateStr = dateOfExams.getYear()+"-"+dateOfExams.getMonthValue()+"-0"+dateOfExams.getDayOfMonth();
+            }
+        } else {
+            if (dateOfExams.getDayOfMonth()>=10){
+                dateStr = dateOfExams.getYear()+"-0"+dateOfExams.getMonthValue()+"-"+dateOfExams.getDayOfMonth();
+            }else {
+                dateStr = dateOfExams.getYear()+"-0"+dateOfExams.getMonthValue()+"-0"+dateOfExams.getDayOfMonth();
+            }
+        }
+        return dateStr;
     }
 }

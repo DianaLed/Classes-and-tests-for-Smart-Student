@@ -86,6 +86,8 @@ public class Study {
     public void clickReady(Double res){
         if(res==1.0&&sub.getQuestion(nomQuestNow).getPercentKnow()!=1.0)
             nowLearned++;
+        if(res!=1.0&&sub.getQuestion(nomQuestNow).getPercentKnow()==1.0)
+            nowLearned--;
         if(nomQuestNow!=-1) sub.getQuestion(nomQuestNow).сhangePrcentAndSize(res);
     }
 
